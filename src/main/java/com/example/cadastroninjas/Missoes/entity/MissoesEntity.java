@@ -2,13 +2,17 @@ package com.example.cadastroninjas.Missoes.entity;
 
 import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "tb_missoes")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MissoesEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
