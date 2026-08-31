@@ -17,10 +17,14 @@ public class NinjaEntity {
     private Long id;
 
     private String nome;
-    private Integer idade;
 
     @Column(unique = true)
     private String email;
+
+    private Integer idade;
+
+    @Column(name = "img_url")
+    private String imgUrl;
 
     @ManyToOne
     @JoinColumn(name = "missoes_id")
