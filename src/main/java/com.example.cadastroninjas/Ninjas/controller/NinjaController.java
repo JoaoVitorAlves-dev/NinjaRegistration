@@ -1,5 +1,6 @@
 package com.example.cadastroninjas.Ninjas.controller;
 
+import com.example.cadastroninjas.Ninjas.dto.NinjaDTO;
 import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
 import com.example.cadastroninjas.Ninjas.service.NinjaService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class NinjaController {
     private final NinjaService ninjaService;
 
     @PostMapping("/criar")
-    public NinjaEntity criarNinja(@RequestBody NinjaEntity ninja) {
+    public NinjaDTO criarNinja(@RequestBody NinjaDTO ninja) {
         return ninjaService.criarNinja(ninja);
     }
 

@@ -1,18 +1,24 @@
 package com.example.cadastroninjas.Ninjas.service;
 
+import com.example.cadastroninjas.Ninjas.dto.NinjaDTO;
+import com.example.cadastroninjas.Ninjas.dto.NinjaMapper;
 import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
 import com.example.cadastroninjas.Ninjas.repository.NinjaRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class NinjaService {
 
-    private final NinjaRepository ninjaRepository;
+    private NinjaRepository ninjaRepository;
+    private NinjaMapper ninjaMapper;
+
+    public NinjaService(NinjaRepository ninjaRepository, NinjaMapper ninjaMapper) {
+        this.ninjaRepository = ninjaRepository;
+        this.ninjaMapper = ninjaMapper;
+    }
 
     public List<NinjaEntity> listarNinjas() {
         return ninjaRepository.findAll();
@@ -24,8 +30,10 @@ public class NinjaService {
                 orElseThrow(() -> new RuntimeException("Id não encontrado"));
     }
 
-    public NinjaEntity criarNinja(NinjaEntity ninja) {
-        return ninjaRepository.save(ninja);
+    public NinjaDTO criarNinja(NinjaDTO ninja) {
+        NinjaEntity ninjaEntity = ninjaMapper.map(ninja);
+        ninjaEntity = ninjaRepository.save(ninjaEntity);
+        return ninjaMapper.map(ninjaEntity);
     }
 
     public NinjaEntity atualizarNinja(Long id, NinjaEntity ninja) {
