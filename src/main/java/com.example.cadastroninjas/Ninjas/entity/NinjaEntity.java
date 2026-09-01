@@ -13,18 +13,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NinjaEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nome")
     private String nome;
 
     @Column(unique = true)
     private String email;
 
-    private Integer idade;
-
     @Column(name = "img_url")
     private String imgUrl;
+
+    @Column(name = "idade")
+    private Integer idade;
+
+    @Column(name = "rank")
+    private String rank;
 
     @ManyToOne
     @JoinColumn(name = "missoes_id")
