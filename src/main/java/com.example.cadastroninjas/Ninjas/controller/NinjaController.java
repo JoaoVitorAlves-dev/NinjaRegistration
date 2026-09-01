@@ -1,16 +1,42 @@
 package com.example.cadastroninjas.Ninjas.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
+import com.example.cadastroninjas.Ninjas.service.NinjaService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/controller")
+@RequestMapping("/ninjas")
+@RequiredArgsConstructor
 public class NinjaController {
 
-    @GetMapping("/boasvindas")
-    public String boasVindas() {
-        return "Essa é minha primeira mensagem nessa rota";
+    private final NinjaService ninjaService;
+
+    @PostMapping("/criar")
+    public NinjaEntity criarNinja(@RequestBody NinjaEntity ninja) {
+        return ninjaService.criarNinja(ninja);
+    }
+
+    @GetMapping("/listar")
+    public List<NinjaEntity> listarNinjas() {
+        return ninjaService.listarNinjas();
+    }
+
+    @GetMapping("/listar/{id}")
+    public NinjaEntity mostrarTodosOsNinjasPorId(@PathVariable Long id) {
+        return ninjaService.listarNinjasPorId(id);
+    }
+
+    @PatchMapping("/alterar/{id}")
+    public NinjaEntity alterarNinja(@PathVariable Long id, @RequestBody NinjaEntity ninja) {
+        return ninjaService.atualizarNinja(id, ninja);
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public void deletarNinjaPorId(@PathVariable Long id) {
+        ninjaService.deletarPorId(id);
     }
 
 }
