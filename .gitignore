@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 .env
+src/main/resources/db/migrations/
+src/main/resources/db.migrations/
 
 ### NetBeans ###
 /nbproject/private/
