@@ -29,6 +29,7 @@ public class NinjaController {
         return ninjaService.listarNinjasPorId(id);
     }
 
+    //@PutMapping
     @PatchMapping("/alterar/{id}")
     public NinjaEntity alterarNinja(@PathVariable Long id, @RequestBody NinjaEntity ninja) {
         return ninjaService.atualizarNinja(id, ninja);
