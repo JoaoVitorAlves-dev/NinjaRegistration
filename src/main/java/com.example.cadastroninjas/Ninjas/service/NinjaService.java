@@ -6,8 +6,10 @@ import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
 import com.example.cadastroninjas.Ninjas.repository.NinjaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class NinjaService {
@@ -20,14 +22,18 @@ public class NinjaService {
         this.ninjaMapper = ninjaMapper;
     }
 
-    public List<NinjaEntity> listarNinjas() {
-        return ninjaRepository.findAll();
+    public List<NinjaDTO> listarNinjas() {
+        List<NinjaEntity> ninjas = ninjaRepository.findAll();
+        return ninjas.stream()
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public NinjaEntity listarNinjasPorId(Long id) {
+    public NinjaDTO listarNinjasPorId(Long id) {
         Optional<NinjaEntity> ninjaEntity = ninjaRepository.findById(id);
-        return ninjaEntity.
-                orElseThrow(() -> new RuntimeException("Id não encontrado"));
+        return ninjaEntity
+                .map(ninjaMapper::map)
+                .orElseThrow(() -> new RuntimeException("Id não encontrado"));
     }
 
     public NinjaDTO criarNinja(NinjaDTO ninja) {
@@ -36,12 +42,16 @@ public class NinjaService {
         return ninjaMapper.map(ninjaEntity);
     }
 
-    public NinjaEntity atualizarNinja(Long id, NinjaEntity ninja) {
-        if (ninjaRepository.existsById(id)) {
-            ninja.setId(id);
-            return ninjaRepository.save(ninja);
+    public NinjaDTO atualizarNinja(Long id, NinjaDTO ninja) {
+        Optional<NinjaEntity> ninjaExistente = ninjaRepository.findById(id);
+
+        if (ninjaExistente.isPresent()) {
+            NinjaEntity ninjaAtualizado = ninjaMapper.map(ninja);
+            ninjaAtualizado.setId(id);
+            NinjaEntity ninjaSalvo = ninjaRepository.save(ninjaAtualizado);
+            return ninjaMapper.map(ninjaSalvo);
         }
-        throw new RuntimeException("Id já existe");
+        return null;
     }
 
     public void deletarPorId(Long id) {
