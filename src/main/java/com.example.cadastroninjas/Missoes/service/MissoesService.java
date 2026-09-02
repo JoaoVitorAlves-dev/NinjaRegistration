@@ -37,7 +37,7 @@ public class MissoesService {
     }
 
     public MissoesDTO atualizarPorId(Long id, MissoesDTO missoesDTO) {
-        MissoesEntity missoesEntity = missoesRepository.findById(id).orElseThrow(() -> new RuntimeException("Id não existe"));
+        missoesRepository.findById(id).orElseThrow(() -> new RuntimeException("Id não existe"));
         MissoesEntity missoesAtualizada = missoesMapper.map(missoesDTO);
         missoesAtualizada.setId(id);
         MissoesEntity missoesSalva = missoesRepository.save(missoesAtualizada);
