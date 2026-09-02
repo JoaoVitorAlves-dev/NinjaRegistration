@@ -1,5 +1,6 @@
 package com.example.cadastroninjas.Ninjas.controller;
 
+import com.example.cadastroninjas.Ninjas.dto.NinjaDTO;
 import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
 import com.example.cadastroninjas.Ninjas.service.NinjaService;
 import lombok.RequiredArgsConstructor;
@@ -15,23 +16,23 @@ public class NinjaController {
     private final NinjaService ninjaService;
 
     @PostMapping("/criar")
-    public NinjaEntity criarNinja(@RequestBody NinjaEntity ninja) {
+    public NinjaDTO criarNinja(@RequestBody NinjaDTO ninja) {
         return ninjaService.criarNinja(ninja);
     }
 
     @GetMapping("/listar")
-    public List<NinjaEntity> listarNinjas() {
+    public List<NinjaDTO> listarNinjas() {
         return ninjaService.listarNinjas();
     }
 
     @GetMapping("/listar/{id}")
-    public NinjaEntity mostrarTodosOsNinjasPorId(@PathVariable Long id) {
+    public NinjaDTO mostrarTodosOsNinjasPorId(@PathVariable Long id) {
         return ninjaService.listarNinjasPorId(id);
     }
 
     //@PutMapping
     @PatchMapping("/alterar/{id}")
-    public NinjaEntity alterarNinja(@PathVariable Long id, @RequestBody NinjaEntity ninja) {
+    public NinjaDTO alterarNinja(@PathVariable Long id, @RequestBody NinjaDTO ninja) {
         return ninjaService.atualizarNinja(id, ninja);
     }
 

@@ -1,39 +1,57 @@
 package com.example.cadastroninjas.Ninjas.service;
 
+import com.example.cadastroninjas.Ninjas.dto.NinjaDTO;
+import com.example.cadastroninjas.Ninjas.dto.NinjaMapper;
 import com.example.cadastroninjas.Ninjas.entity.NinjaEntity;
 import com.example.cadastroninjas.Ninjas.repository.NinjaRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class NinjaService {
 
-    private final NinjaRepository ninjaRepository;
+    private NinjaRepository ninjaRepository;
+    private NinjaMapper ninjaMapper;
 
-    public List<NinjaEntity> listarNinjas() {
-        return ninjaRepository.findAll();
+    public NinjaService(NinjaRepository ninjaRepository, NinjaMapper ninjaMapper) {
+        this.ninjaRepository = ninjaRepository;
+        this.ninjaMapper = ninjaMapper;
     }
 
-    public NinjaEntity listarNinjasPorId(Long id) {
+    public List<NinjaDTO> listarNinjas() {
+        List<NinjaEntity> ninjas = ninjaRepository.findAll();
+        return ninjas.stream()
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    public NinjaDTO listarNinjasPorId(Long id) {
         Optional<NinjaEntity> ninjaEntity = ninjaRepository.findById(id);
-        return ninjaEntity.
-                orElseThrow(() -> new RuntimeException("Id não encontrado"));
+        return ninjaEntity
+                .map(ninjaMapper::map)
+                .orElseThrow(() -> new RuntimeException("Id não encontrado"));
     }
 
-    public NinjaEntity criarNinja(NinjaEntity ninja) {
-        return ninjaRepository.save(ninja);
+    public NinjaDTO criarNinja(NinjaDTO ninja) {
+        NinjaEntity ninjaEntity = ninjaMapper.map(ninja);
+        ninjaEntity = ninjaRepository.save(ninjaEntity);
+        return ninjaMapper.map(ninjaEntity);
     }
 
-    public NinjaEntity atualizarNinja(Long id, NinjaEntity ninja) {
-        if (ninjaRepository.existsById(id)) {
-            ninja.setId(id);
-            return ninjaRepository.save(ninja);
+    public NinjaDTO atualizarNinja(Long id, NinjaDTO ninja) {
+        Optional<NinjaEntity> ninjaExistente = ninjaRepository.findById(id);
+
+        if (ninjaExistente.isPresent()) {
+            NinjaEntity ninjaAtualizado = ninjaMapper.map(ninja);
+            ninjaAtualizado.setId(id);
+            NinjaEntity ninjaSalvo = ninjaRepository.save(ninjaAtualizado);
+            return ninjaMapper.map(ninjaSalvo);
         }
-        throw new RuntimeException("Id já existe");
+        return null;
     }
 
     public void deletarPorId(Long id) {
